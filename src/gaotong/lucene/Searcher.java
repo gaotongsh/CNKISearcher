@@ -1,0 +1,40 @@
+package gaotong.lucene;
+
+import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+public class Searcher {
+
+    private IndexSearcher indexSearcher;
+    private QueryParser queryParser;
+
+    public Searcher(String indexPath) throws IOException {
+        Path indexDir = Paths.get(indexPath);
+        Directory dir = FSDirectory.open(indexDir);
+        DirectoryReader directoryReader = DirectoryReader.open(dir);
+        indexSearcher = new IndexSearcher(directoryReader);
+        queryParser = new QueryParser("题名", new SmartChineseAnalyzer());
+    }
+
+    public TopDocs search(String queryString) throws ParseException, IOException {
+        Query query = queryParser.parse(queryString);
+        return indexSearcher.search(query, 100);
+    }
+
+    public Document getDocument(ScoreDoc scoreDoc) throws IOException {
+        return indexSearcher.doc(scoreDoc.doc);
+    }
+}
