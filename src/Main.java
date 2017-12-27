@@ -19,10 +19,13 @@ public class Main {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             System.out.print("Use SmartCnAnalyzer instead of Bigram CJK Analyzer (Y/n)? ");
             boolean isUseSmartCn = parseBoolean(br.readLine().toLowerCase());
+            System.out.print("Keep original index? (Y/n)? ");
 
-            Indexer indexer = new Indexer(indexPath, isUseSmartCn);
-            indexer.createIndex(dataFile);
-            indexer.closeWriter();
+            if (!parseBoolean(br.readLine().toLowerCase())) {
+                Indexer indexer = new Indexer(indexPath, isUseSmartCn);
+                indexer.createIndex(dataFile);
+                indexer.closeWriter();
+            }
 
             String query;
             while(true) {
@@ -32,9 +35,12 @@ public class Main {
                     break;
                 Searcher searcher = new Searcher(indexPath, isUseSmartCn);
                 TopDocs topDocs = searcher.search(query);
+                System.out.println("Found a total of " + topDocs.totalHits + " hits:");
+                System.out.println("--------------------------");
                 for (ScoreDoc sd : topDocs.scoreDocs) {
-                    System.out.println("Hit: " + searcher.getDocument(sd).get(LuceneConstants.TITLE) + " " + sd.score);
+                    System.out.println("Title: " + searcher.getDocument(sd).get(LuceneConstants.TITLE) + " " + sd.score);
                 }
+                System.out.println("--------------------------");
             }
         } catch (IOException | ParseException e) {
             e.printStackTrace();
