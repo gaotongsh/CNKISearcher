@@ -1,4 +1,5 @@
 import gaotong.lucene.Indexer;
+import gaotong.lucene.LuceneConstants;
 import gaotong.lucene.Searcher;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.ScoreDoc;
@@ -21,7 +22,7 @@ public class Main {
             Searcher searcher = new Searcher(indexPath);
             TopDocs topDocs = searcher.search(query);
             for (ScoreDoc sd : topDocs.scoreDocs) {
-                System.out.println("Hit: " + searcher.getDocument(sd).get("题名"));
+                System.out.println("Hit: " + searcher.getDocument(sd).get(LuceneConstants.TITLE) + " " + sd.score);
             }
         } catch (IOException | ParseException e) {
             e.printStackTrace();

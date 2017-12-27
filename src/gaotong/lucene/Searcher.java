@@ -26,7 +26,7 @@ public class Searcher {
         Directory dir = FSDirectory.open(indexDir);
         DirectoryReader directoryReader = DirectoryReader.open(dir);
         indexSearcher = new IndexSearcher(directoryReader);
-        queryParser = new QueryParser("题名", new SmartChineseAnalyzer());
+        queryParser = new QueryParser(LuceneConstants.TITLE, new SmartChineseAnalyzer());
     }
 
     public TopDocs search(String queryString) throws ParseException, IOException {

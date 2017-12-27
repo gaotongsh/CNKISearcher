@@ -2,9 +2,7 @@ package gaotong.lucene;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.TextField;
+import org.apache.lucene.document.*;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
@@ -16,6 +14,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.ParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -83,7 +82,35 @@ public class Indexer {
         Matcher m = pattern.matcher(line);
         boolean b = m.matches();
         assert b;
-        return new TextField(m.group(1), m.group(2), Field.Store.YES);
+
+        Field field = null;
+        switch (m.group(1)) {
+            case LuceneConstants.TITLE:
+            case LuceneConstants.AUTHOR:
+            case LuceneConstants.FIRST_AUTHOR:
+            case LuceneConstants.KEYWORD:
+            case LuceneConstants.ABSTRACT:
+            case LuceneConstants.INSTITUTE:
+            case LuceneConstants.SOURCE:
+            case LuceneConstants.TITLE_ENGLISH:
+            case LuceneConstants.AUTHOR_ENGLISH:
+            case LuceneConstants.KEYWORD_ENGLISH:
+            case LuceneConstants.ABSTRACT_ENGLISH:
+                field = new TextField(m.group(1), m.group(2), Field.Store.YES);
+                break;
+            case LuceneConstants.DATE:
+                try {
+                    field = new LongPoint(m.group(1), DateTools.stringToTime(m.group(2)));
+                } catch (ParseException e) {
+                    System.err.println("Parse Date Error: " + m.group(2));
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                field = new StoredField(m.group(1), m.group(2));
+        }
+
+        return field;
     }
 
     private void logAddFile(Document d) {
