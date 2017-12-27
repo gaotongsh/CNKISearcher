@@ -1,7 +1,6 @@
 package gaotong.lucene;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
 import org.apache.lucene.document.*;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -26,10 +25,10 @@ public class Indexer {
     private static Pattern pattern;
     private IndexWriter indexWriter;
 
-    public Indexer(String indexPath) throws IOException {
+    public Indexer(String indexPath, boolean isUseSmartCn) throws IOException {
         Path indexDir = Paths.get(indexPath);
         Directory dir = FSDirectory.open(indexDir);
-        Analyzer smartCnAnalyzer = new SmartChineseAnalyzer();
+        Analyzer smartCnAnalyzer = CNKIAnalyzerFactory.getAnalyzer(isUseSmartCn);
         IndexWriterConfig config = new IndexWriterConfig(smartCnAnalyzer);
         config.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
         indexWriter = new IndexWriter(dir, config);

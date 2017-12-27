@@ -1,6 +1,5 @@
 package gaotong.lucene;
 
-import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.queryparser.classic.ParseException;
@@ -21,12 +20,12 @@ public class Searcher {
     private IndexSearcher indexSearcher;
     private QueryParser queryParser;
 
-    public Searcher(String indexPath) throws IOException {
+    public Searcher(String indexPath, boolean isUseSmartCn) throws IOException {
         Path indexDir = Paths.get(indexPath);
         Directory dir = FSDirectory.open(indexDir);
         DirectoryReader directoryReader = DirectoryReader.open(dir);
         indexSearcher = new IndexSearcher(directoryReader);
-        queryParser = new QueryParser(LuceneConstants.TITLE, new SmartChineseAnalyzer());
+        queryParser = new QueryParser(LuceneConstants.TITLE, CNKIAnalyzerFactory.getAnalyzer(isUseSmartCn));
     }
 
     public TopDocs search(String queryString) throws ParseException, IOException {
