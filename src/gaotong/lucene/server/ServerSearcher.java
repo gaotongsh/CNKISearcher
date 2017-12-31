@@ -45,15 +45,14 @@ public class ServerSearcher {
         try {
             System.out.print("Searching " + query);
             TopDocs topDocs = searcher.search(query);
-            List<Map<String, String>> mapList = new LinkedList<>();
+            List<ResultItem> mapList = new LinkedList<>();
             for (ScoreDoc sd : topDocs.scoreDocs) {
                 Document document = searcher.getDocument(sd);
 //                System.out.println(document.getField(LuceneConstants.TITLE));
-                Map<String, String> docMap = new HashMap<>();
+                ResultItem docMap = new ResultItem();
                 List<IndexableField> fields = document.getFields();
-                docMap.put("\"aaa\"", "bbb");
                 for(IndexableField field : fields){
-                    docMap.put('"' + field.name() + '"', field.stringValue());
+                    docMap.getItems().put(field.name(), field.stringValue());
                 }
                 mapList.add(docMap);
             }

@@ -7,20 +7,20 @@ import java.util.List;
 @XmlRootElement
 public class Result {
 
-    private List<Map<String,String>> records;
+    private List<ResultItem> records;
     private int retrieved = 0;
     private int available = 0;
 
     public Result() {}
 
-    public Result(List<Map<String, String>> records, int retrieved, int available) {
+    public Result(List<ResultItem> records, int retrieved, int available) {
         super();
         this.records = records;
         this.retrieved = retrieved;
         this.available = available;
     }
 
-    public List<Map<String, String>> getRecords() {
+    public List<ResultItem> getRecords() {
         return records;
     }
 
@@ -36,7 +36,7 @@ public class Result {
         this.available = available;
     }
 
-    public void setRecords(List<Map<String, String>> records) {
+    public void setRecords(List<ResultItem> records) {
         this.records = records;
     }
 
