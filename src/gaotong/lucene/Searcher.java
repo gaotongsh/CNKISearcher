@@ -17,6 +17,7 @@ import java.nio.file.Paths;
 
 public class Searcher {
 
+    private DirectoryReader directoryReader;
     private IndexSearcher indexSearcher;
     private QueryParser queryParser;
     private int numDocs;
@@ -24,7 +25,7 @@ public class Searcher {
     public Searcher(String indexPath, boolean isUseSmartCn) throws IOException {
         Path indexDir = Paths.get(indexPath);
         Directory dir = FSDirectory.open(indexDir);
-        DirectoryReader directoryReader = DirectoryReader.open(dir);
+        directoryReader = DirectoryReader.open(dir);
         numDocs = directoryReader.numDocs();
         indexSearcher = new IndexSearcher(directoryReader);
         queryParser = new QueryParser(LuceneConstants.TITLE, CNKIAnalyzerFactory.getAnalyzer(isUseSmartCn));
@@ -42,5 +43,13 @@ public class Searcher {
 
     public Document getDocument(ScoreDoc scoreDoc) throws IOException {
         return indexSearcher.doc(scoreDoc.doc);
+    }
+
+    public QueryParser getQueryParser() {
+        return queryParser;
+    }
+
+    public DirectoryReader getDirectoryReader() {
+        return directoryReader;
     }
 }

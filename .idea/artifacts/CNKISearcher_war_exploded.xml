@@ -40,6 +40,9 @@
           <element id="library" level="project" name="Maven: org.eclipse.persistence:org.eclipse.persistence.core:2.6.4" />
           <element id="library" level="project" name="Maven: org.eclipse.persistence:org.eclipse.persistence.asm:2.6.4" />
           <element id="library" level="project" name="Maven: org.glassfish:javax.json:1.0.4" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-highlighter:7.1.0" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-join:7.1.0" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-memory:7.1.0" />
         </element>
       </element>
     </root>
