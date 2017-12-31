@@ -6,6 +6,7 @@ import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
 import org.apache.lucene.analysis.core.SimpleAnalyzer;
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,17 +17,18 @@ public class CNKIAnalyzerFactory {
 
         Map<String, Analyzer> analyzerPerField = new HashMap<>();
 
-        Analyzer cnAnalyzer, enAnalyzer;
+        Analyzer cnAnalyzer, enAnalyzer, stdAnalyzer;
         if (isUseSmartCn) {
             cnAnalyzer = new SmartChineseAnalyzer();
         } else {
             cnAnalyzer = new CJKAnalyzer();
         }
         enAnalyzer = new EnglishAnalyzer();
+        stdAnalyzer = new StandardAnalyzer();
 
         analyzerPerField.put(LuceneConstants.TITLE, cnAnalyzer);
-        analyzerPerField.put(LuceneConstants.AUTHOR, cnAnalyzer);
-        analyzerPerField.put(LuceneConstants.FIRST_AUTHOR, cnAnalyzer);
+        analyzerPerField.put(LuceneConstants.AUTHOR, stdAnalyzer);
+        analyzerPerField.put(LuceneConstants.FIRST_AUTHOR, stdAnalyzer);
         analyzerPerField.put(LuceneConstants.KEYWORD, cnAnalyzer);
         analyzerPerField.put(LuceneConstants.ABSTRACT, cnAnalyzer);
         analyzerPerField.put(LuceneConstants.INSTITUTE, cnAnalyzer);
