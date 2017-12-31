@@ -13,10 +13,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 @Path("/search")
 public class ServerSearcher {
@@ -37,14 +35,27 @@ public class ServerSearcher {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Result testGetQuery(@QueryParam("query") String query) {
-        if (query == null) {
+    public Result testGetQuery(
+            @QueryParam("query") String query,
+            @QueryParam("count") String count) {
+        if (query == null || count == null) {
             return null;
+        }
+
+        int countInt = -1;
+        if (!count.equals("all")) {
+            countInt = Integer.parseInt(count);
         }
 
         try {
             System.out.print("Searching " + query);
-            TopDocs topDocs = searcher.search(query);
+            // Core Searching Instruction
+            TopDocs topDocs;
+            if (countInt == -1) {
+                topDocs = searcher.search(query);
+            } else {
+                topDocs = searcher.search(query, countInt);
+            }
             List<ResultItem> mapList = new LinkedList<>();
             for (ScoreDoc sd : topDocs.scoreDocs) {
                 Document document = searcher.getDocument(sd);
