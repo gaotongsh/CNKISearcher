@@ -14,7 +14,7 @@ public class Main {
     public static void main(String[] args) {
 
         String indexPath = "../index/";
-        String dataFile = "../data/CNKI_toy.txt";
+        String dataFile = "../data/CNKI_journal_v2.txt";
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             System.out.print("Use SmartCnAnalyzer instead of Bigram CJK Analyzer (Y/n)? ");
